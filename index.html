@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" id="htmlRoot">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0E2224">
 <title>عروض نون الحصرية | السعودية · الإمارات · مصر</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,58 +21,103 @@
 </script>
 
 <style>
+  /* ---------- Light theme (default) ---------- */
   :root{
+    --header-bg:#0E2224;
+    --header-fg:#F6F1E2;
     --ink:#0E2224;
     --teal:#0F4C4C;
     --teal-light:#1B6B67;
     --gold:#C9A227;
-    --cream:#F6F1E2;
-    --cream-2:#EFE7D3;
+    --bg:#F6F1E2;
+    --card-bg:#FFFFFF;
+    --card-alt:#EFE7D3;
     --coral:#E4572E;
     --muted:#5D6E6A;
     --line:rgba(14,34,36,.12);
     --radius:16px;
+    --shadow: 0 16px 30px -18px rgba(14,34,36,.35);
   }
+  /* ---------- Dark theme ---------- */
+  :root[data-theme="dark"]{
+    --header-bg:#0A1414;
+    --header-fg:#F1F4F3;
+    --ink:#ECEFED;
+    --teal:#35A79C;
+    --teal-light:#48C2B5;
+    --gold:#E3BE55;
+    --bg:#0E1615;
+    --card-bg:#17201F;
+    --card-alt:#1D2725;
+    --coral:#FF7A55;
+    --muted:#9BAAA6;
+    --line:rgba(255,255,255,.10);
+    --shadow: 0 16px 34px -16px rgba(0,0,0,.55);
+  }
+
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
-  body{background:var(--cream);color:var(--ink);font-family:'Tajawal',sans-serif;line-height:1.6;}
+  body{background:var(--bg);color:var(--ink);font-family:'Tajawal',sans-serif;line-height:1.6;transition:background-color .25s ease,color .25s ease;}
   h1,h2,h3,.display{font-family:'Cairo',sans-serif;font-weight:900;letter-spacing:-0.01em;}
   a{color:inherit;text-decoration:none;}
   img{max-width:100%;display:block;}
-  .wrap{max-width:1120px;margin:0 auto;padding:0 20px;}
+  .wrap{max-width:1160px;margin:0 auto;padding:0 20px;}
+  button{font-family:inherit;}
+
+  ::-webkit-scrollbar{height:8px;width:8px;}
+  ::-webkit-scrollbar-thumb{background:var(--line);border-radius:99px;}
+
+  /* ---------- reveal animation ---------- */
+  @keyframes fadeUp{ from{opacity:0; transform:translateY(18px);} to{opacity:1; transform:translateY(0);} }
+  .reveal{opacity:0;}
+  .reveal.in-view{animation:fadeUp .55s ease forwards;}
 
   /* ---------- header ---------- */
-  header{background:var(--ink);color:var(--cream);padding:16px 0;position:sticky;top:0;z-index:50;border-bottom:3px solid var(--gold);}
+  header{background:var(--header-bg);color:var(--header-fg);padding:14px 0;position:sticky;top:0;z-index:50;border-bottom:3px solid var(--gold);transition:box-shadow .25s ease;}
+  header.scrolled{box-shadow:0 10px 24px -14px rgba(0,0,0,.45);}
+  .header-inner{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
   .logo{display:flex;align-items:center;gap:10px;}
-  .logo .mark{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--gold),#8f7314);display:flex;align-items:center;justify-content:center;font-family:'Cairo';font-weight:900;color:var(--ink);font-size:18px;}
+  .logo .mark{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--gold),#8f7314);display:flex;align-items:center;justify-content:center;font-family:'Cairo';font-weight:900;color:#0E2224;font-size:18px;flex-shrink:0;}
   .logo .name{font-family:'Cairo';font-weight:800;font-size:19px;}
   .logo .name span{color:var(--gold);}
 
-  /* ---------- hero ---------- */
-  .hero{padding:52px 0 30px;text-align:center;}
-  .eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--cream-2);border:1px solid var(--line);color:var(--teal);font-weight:700;font-size:13px;padding:6px 14px;border-radius:999px;margin-bottom:18px;}
-  .hero h1{font-size:clamp(28px,5vw,44px);margin:0 0 14px;}
-  .hero p{color:var(--muted);font-size:16px;max-width:580px;margin:0 auto;}
+  .header-tools{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .social-row{display:flex;gap:6px;}
+  .social-row a{width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:16px;transition:.15s;}
+  .social-row a:hover{background:rgba(255,255,255,.18);transform:translateY(-2px);}
+
+  .icon-btn{width:38px;height:38px;border-radius:10px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);color:var(--header-fg);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:.2s;}
+  .icon-btn:hover{background:rgba(255,255,255,.18);}
+  .lang-btn{width:auto;padding:0 12px;font-weight:800;font-size:13px;}
+
+  /* ---------- hero (personal identity) ---------- */
+  .hero{padding:46px 0 28px;text-align:center;}
+  .avatar{width:74px;height:74px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#8f7314);color:#0E2224;font-family:'Cairo';font-weight:900;font-size:28px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;box-shadow:var(--shadow);}
+  .bio-name{font-family:'Cairo';font-weight:800;font-size:18px;margin-bottom:4px;}
+  .bio-text{color:var(--muted);font-size:14px;max-width:480px;margin:0 auto 18px;}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--card-alt);border:1px solid var(--line);color:var(--teal);font-weight:700;font-size:13px;padding:6px 14px;border-radius:999px;margin-bottom:18px;}
+  .hero h1{font-size:clamp(26px,4.6vw,42px);margin:0 0 14px;}
+  .hero p.lede{color:var(--muted);font-size:16px;max-width:580px;margin:0 auto;}
 
   /* ---------- codes rectangle ---------- */
   .codes-box{
-    max-width:760px;margin:34px auto 0;background:var(--teal);color:var(--cream);
+    max-width:760px;margin:32px auto 0;background:var(--teal);color:#F6F1E2;
     border-radius:24px;padding:26px;display:flex;gap:18px;flex-wrap:wrap;
     box-shadow:0 14px 34px -14px rgba(15,76,76,.6);
   }
   .code-cell{
-    flex:1;min-width:280px;display:flex;flex-direction:column;gap:14px;
+    flex:1;min-width:260px;display:flex;flex-direction:column;gap:14px;
     background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);
     border-radius:18px;padding:20px 22px;
   }
   .code-cell .flags{font-size:26px;line-height:1;}
-  .code-cell .info .lbl{font-size:16px;opacity:.9;font-weight:700;margin-top:6px;}
+  .code-cell .info .lbl{font-size:15px;opacity:.9;font-weight:700;margin-top:6px;}
   .code-cell .info .code{
-    font-family:'Cairo';font-weight:900;font-size:34px;letter-spacing:.06em;
+    font-family:'Cairo';font-weight:900;font-size:32px;letter-spacing:.06em;
     color:var(--gold);margin-top:6px;word-break:break-all;
   }
   .copy-btn{
-    background:var(--gold);color:var(--ink);border:none;font-family:'Tajawal';font-weight:800;
+    background:var(--gold);color:#0E2224;border:none;font-family:'Tajawal';font-weight:800;
     font-size:16px;padding:13px 18px;border-radius:12px;cursor:pointer;white-space:nowrap;
     transition:.15s;width:100%;
   }
@@ -79,157 +125,202 @@
   .copy-btn.copied{background:#3FA34D;color:#fff;}
 
   /* ---------- section title ---------- */
-  .section-title{display:flex;align-items:baseline;justify-content:space-between;margin:56px 0 18px;flex-wrap:wrap;gap:8px;}
-  .section-title h2{font-size:24px;margin:0;}
+  .section-title{display:flex;align-items:baseline;justify-content:space-between;margin:52px 0 18px;flex-wrap:wrap;gap:8px;}
+  .section-title h2{font-size:23px;margin:0;}
   .section-title span{color:var(--muted);font-size:13px;}
+
+  /* ---------- bestsellers strip ---------- */
+  .bestseller-grid{display:flex;gap:16px;overflow-x:auto;padding:4px 4px 14px;scroll-snap-type:x proximity;}
+  .bestseller-grid .card{min-width:230px;scroll-snap-align:start;border-color:var(--gold);}
+  #bestsellersSection{display:none;}
+  #bestsellersSection.has-items{display:block;}
 
   /* ---------- country filter tabs ---------- */
   .country-filter{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:26px;}
   .country-filter button{
-    border:1px solid var(--line);background:#fff;color:var(--ink);
+    border:1px solid var(--line);background:var(--card-bg);color:var(--ink);
     font-family:'Tajawal';font-weight:700;font-size:14.5px;
     padding:10px 20px;border-radius:999px;cursor:pointer;transition:.15s;
   }
-  .country-filter button.active{background:var(--ink);color:#fff;border-color:var(--ink);}
-  .country-filter button:hover:not(.active){background:var(--cream-2);}
+  .country-filter button.active{background:var(--ink);color:var(--bg);border-color:var(--ink);}
+  .country-filter button:hover:not(.active){background:var(--card-alt);}
 
-  /* ---------- encouragement ribbon ---------- */
+  /* ---------- ribbon ---------- */
   .ribbon{
     background:linear-gradient(90deg,var(--coral),#F08A55);color:#fff;
-    font-weight:800;font-size:13px;text-align:center;padding:7px 8px;
+    font-weight:800;font-size:12.5px;text-align:center;padding:7px 8px;
   }
+  .ribbon.rank{background:linear-gradient(90deg,var(--gold),#8f7314);}
 
-  /* ---------- product grid ---------- */
+  /* ---------- product grid / card ---------- */
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px;}
-  .card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;transition:.2s;}
-  .card:hover{transform:translateY(-4px);box-shadow:0 16px 30px -18px rgba(14,34,36,.35);}
-  .card .thumb{aspect-ratio:1/1;background:var(--cream-2);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px;text-align:center;padding:10px;overflow:hidden;}
-  .card .thumb img{width:100%;height:100%;object-fit:contain;}
+  .card{background:var(--card-bg);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease;}
+  .card:hover{transform:translateY(-5px);box-shadow:var(--shadow);border-color:var(--gold);}
+  .card .thumb{aspect-ratio:1/1;background:var(--card-alt);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px;text-align:center;padding:14px;overflow:hidden;position:relative;}
+  .card .thumb img{width:100%;height:100%;object-fit:contain;transition:transform .35s ease;}
+  .card:hover .thumb img{transform:scale(1.06);}
   .card .body{padding:14px 14px 16px;display:flex;flex-direction:column;gap:10px;flex:1;}
   .card .title{font-weight:700;font-size:14.5px;min-height:38px;}
 
-  .avail-note{font-size:11.5px;color:var(--teal);background:var(--cream-2);border-radius:8px;padding:5px 9px;display:inline-flex;gap:5px;align-items:center;width:fit-content;font-weight:700;}
+  .avail-note{font-size:11.5px;color:var(--teal);background:var(--card-alt);border-radius:8px;padding:5px 9px;display:inline-flex;gap:5px;align-items:center;width:fit-content;font-weight:700;}
 
   .mini-tabs{display:flex;gap:6px;}
-  .mini-tabs button{flex:1;border:1px solid var(--line);background:var(--cream);color:var(--ink);font-size:13px;padding:6px 4px;border-radius:8px;cursor:pointer;font-weight:700;transition:.15s;}
-  .mini-tabs button.active{background:var(--ink);color:#fff;border-color:var(--ink);}
+  .mini-tabs button{flex:1;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-size:13px;padding:6px 4px;border-radius:8px;cursor:pointer;font-weight:700;transition:.15s;}
+  .mini-tabs button.active{background:var(--ink);color:var(--bg);border-color:var(--ink);}
   .mini-tabs button:disabled{opacity:.35;cursor:not-allowed;}
 
   .price-row{font-family:'Cairo';font-weight:800;color:var(--teal);font-size:17px;min-height:22px;}
 
-  /* ---------- rating ---------- */
   .rating-row{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--muted);min-height:16px;}
   .rating-row .stars{color:var(--gold);letter-spacing:1px;font-size:13px;}
   .rating-row .stars .empty{color:var(--line);}
   .rating-row .count{font-weight:700;}
 
   .actions{display:flex;gap:8px;margin-top:auto;}
-  .btn{flex:1;text-align:center;padding:11px 10px;border-radius:10px;font-weight:700;font-size:13.5px;cursor:pointer;border:none;}
-  .btn-buy{background:var(--ink);color:#fff;}
-  .btn-buy:hover{background:var(--teal);}
-  .btn-code{background:var(--cream-2);color:var(--ink);border:1px solid var(--line);}
+  .btn{flex:1;text-align:center;padding:11px 10px;border-radius:10px;font-weight:700;font-size:13.5px;cursor:pointer;border:none;transition:.15s;}
+  .btn-buy{background:var(--ink);color:var(--bg);}
+  .btn-buy:hover{background:var(--teal);transform:translateY(-1px);}
+  .btn-code{background:var(--card-alt);color:var(--ink);border:1px solid var(--line);}
   .btn-code.copied{background:#3FA34D;color:#fff;border-color:#3FA34D;}
   .unavailable-msg{flex:1;text-align:center;background:#F6E4DD;color:var(--coral);font-weight:700;font-size:12.5px;padding:11px 8px;border-radius:10px;}
 
   /* ---------- how-to panel ---------- */
-  .notes{margin-top:64px;background:#fff;border:1px solid var(--line);border-inline-start:5px solid var(--gold);border-radius:var(--radius);padding:28px 28px 24px;}
-  .notes h3{color:var(--teal);font-size:22px;margin:0 0 14px;}
-  .notes ul{margin:0;padding-inline-start:22px;font-size:16px;}
+  .notes{margin-top:60px;background:var(--card-bg);border:1px solid var(--line);border-inline-start:5px solid var(--gold);border-radius:var(--radius);padding:28px 28px 24px;}
+  .notes h3{color:var(--teal);font-size:21px;margin:0 0 14px;}
+  .notes ul{margin:0;padding-inline-start:22px;font-size:15.5px;}
   .notes li{margin-bottom:14px;}
   .notes li b{color:var(--ink);}
 
-  footer{margin-top:70px;background:var(--ink);color:var(--cream);padding:28px 0;}
-  footer .wrap{display:flex;flex-direction:column;gap:8px;align-items:center;text-align:center;}
+  footer{margin-top:64px;background:var(--header-bg);color:var(--header-fg);padding:30px 0;}
+  footer .wrap{display:flex;flex-direction:column;gap:12px;align-items:center;text-align:center;}
   footer p{font-size:12.5px;color:rgba(246,241,226,.65);max-width:640px;margin:0;}
   footer .brand{font-family:'Cairo';font-weight:800;color:var(--gold);}
+
+  @media (max-width:640px){
+    .header-inner{justify-content:center;text-align:center;}
+    .social-row{order:3;width:100%;justify-content:center;margin-top:8px;}
+  }
 </style>
 </head>
 <body>
 
-<header>
-  <div class="wrap">
+<header id="siteHeader">
+  <div class="wrap header-inner">
     <div class="logo">
       <div class="mark">ن</div>
       <div class="name">عروض<span> جــمـــيــلـــة 🤍 </span></div>
+    </div>
+
+    <!-- ============================================================
+         حساباتك الشخصية: عدّل روابط SOCIAL_LINKS في أسفل الصفحة
+         (جوه الـ <script>). أي رابط تسيبه فاضي مش هيظهر خالص.
+         ============================================================ -->
+    <div class="social-row" id="socialRow"></div>
+
+    <div class="header-tools">
+      <button class="icon-btn" id="themeToggle" title="تبديل الوضع الليلي/النهاري">🌙</button>
+      <button class="icon-btn lang-btn" id="langToggle">EN</button>
     </div>
   </div>
 </header>
 
 <section class="hero">
   <div class="wrap">
-    <div class="eyebrow">🔥 عروض مختارة بعناية من نون</div>
-    <h1>أفضل منتجات نون بكود خصم إضافي</h1>
-    <p>كل كارت منتج فيه اختيار دولة جوه، اختار دولتك من على المنتج نفسه وهيتظبطلك السعر والرابط تلقائي.</p>
+    <!-- عدّل الحرف/الاسم/الجملة دي عشان تبقى هوية شخصية بتاعتك -->
+    <div class="avatar">ن</div>
+    <div class="bio-name" data-i18n="bioName"> عروض جــمـــيــلـــة 🤍 </div>
+    <div class="bio-text" data-i18n="bioText">بجمعلك هنا أحسن عروض نون بعين خبيرة، وبتحديث مستمر أول بأول.</div>
+
+    <div class="eyebrow" data-i18n="eyebrow">🔥 عروض مختارة بعناية من نون</div>
+    <h1 data-i18n="h1">أفضل منتجات نون بكود خصم إضافي</h1>
+    <p class="lede" data-i18n="lede">كل كارت منتج فيه اختيار دولة جوه، اختار دولتك من على المنتج نفسه وهيتظبطلك السعر والرابط تلقائي.</p>
 
     <div class="codes-box">
       <div class="code-cell">
         <div class="flags">نون الخليج</div>
         <div class="info">
-          <div class="lbl">كود خصم نون السعودية والإمارات</div>
+          <div class="lbl" data-i18n="gulfLabel">كود خصم نون السعودية والإمارات</div>
           <div class="code" id="codeGulf">MP94</div>
         </div>
-        <button class="copy-btn" onclick="copyCode('codeGulf', this, 'gulf', 'banner')">📋 نسخ الكود</button>
+        <button class="copy-btn" data-i18n="copyBtn" onclick="copyCode('codeGulf', this, 'gulf', 'banner')">📋 نسخ الكود</button>
       </div>
       <div class="code-cell">
         <div class="flags">نون مصر </div>
         <div class="info">
-          <div class="lbl">كود خصم نون مصر</div>
+          <div class="lbl" data-i18n="egyptLabel">كود خصم نون مصر</div>
           <div class="code" id="codeEgypt">PZ396</div>
         </div>
-        <button class="copy-btn" onclick="copyCode('codeEgypt', this, 'egypt', 'banner')">📋 نسخ الكود</button>
+        <button class="copy-btn" data-i18n="copyBtn" onclick="copyCode('codeEgypt', this, 'egypt', 'banner')">📋 نسخ الكود</button>
       </div>
     </div>
   </div>
 </section>
 
 <div class="wrap">
+
+  <!-- ============================================================
+       سكشن الأكثر مبيعًا: بيتملى تلقائي من الشيت (الصفوف اللي ليها
+       featured_rank من 1 لـ5). لو مفيش صفوف، السكشن بيتخفي لوحده.
+       ============================================================ -->
+  <section id="bestsellersSection">
+    <div class="section-title">
+      <h2 data-i18n="bestsellersTitle">🔥 الأكثر مبيعًا</h2>
+    </div>
+    <div class="grid bestseller-grid" id="bestsellerGrid">
+      <!-- N8N:BESTSELLERS:START -->
+      <!-- N8N:BESTSELLERS:END -->
+    </div>
+  </section>
+
   <div class="section-title">
-    <h2>المنتجات المختارة</h2>
-    <span>بيتحدّث تلقائي من الشيت</span>
+    <h2 data-i18n="sectionTitle">المنتجات المختارة</h2>
+    <span data-i18n="sectionSub">بيتحدّث تلقائي من الشيت</span>
   </div>
 
   <div class="country-filter" id="countryFilter">
-    <button data-f="all" class="active">🛍️ كل المنتجات</button>
-    <button data-f="eg"> منتجات مصر</button>
-    <button data-f="sa"> منتجات السعودية</button>
-    <button data-f="ae"> منتجات الإمارات</button>
+    <button data-f="all" class="active" data-i18n="filterAll">🛍️ كل المنتجات</button>
+    <button data-f="eg" data-i18n="filterEg"> منتجات مصر</button>
+    <button data-f="sa" data-i18n="filterSa"> منتجات السعودية</button>
+    <button data-f="ae" data-i18n="filterAe"> منتجات الإمارات</button>
   </div>
 
   <!--
     ============================================================
-    ملحوظة: المحتوى بين N8N:PRODUCTS:START و N8N:PRODUCTS:END
-    بيتكتب/بيتستبدل أوتوماتيك من ورك فلو n8n في كل مرة يشتغل فيها.
-    منتلمسوش يدوي غير للتجربة، عشان الأتمتة هتمسح أي تعديل يدوي
-    جوه المنطقة دي في أول مزامنة جاية.
+    المحتوى بين N8N:PRODUCTS:START و N8N:PRODUCTS:END بيتكتب من
+    n8n تلقائي كل مزامنة. متعدّلش جواها يدوي، التعديل من الشيت.
     ============================================================
   -->
   <div class="grid" id="productGrid">
     <!-- N8N:PRODUCTS:START -->
-<div class="card" data-name="iPhone 17 Pro Max 256 GB (eSIM only) Silver 5G With FaceTime - International Version" data-product-id="product-nftj2l" data-sa-link="https://www.noon.com/en-sa/N70211464V/p/?o=a33c1b30a770ea3d&shareId=23f23600-2f99-46c4-b1b6-dfff4d98abe1&utm_source=C1000094L&utm_medium=referral" data-ae-link="https://www.noon.com/en-ae/N70211464V/p/?o=df8ca885867d8b5a&shareId=362cf6c9-446a-41ee-b0ac-58b21730c57e&utm_source=C1000094L&utm_medium=referral" data-ae-price="4579 AED" data-ae-name="iPhone 17 Pro Max 256 GB (eSIM only) Silver 5G With FaceTime - International Version" data-ae-image="https://f.nooncdn.com/p/pzsku/Z70429BD50D391C2CB0C1Z/45/_/1779094672/2c253ab7-e018-4bb7-a1cd-8ce1571839f6.jpg?width=1200" data-ae-rating="4.5" data-ae-reviews="29856" data-eg-link="https://www.noon.com/en-eg/N70211464V/p/?o=d2426ca023909caa&shareId=5cf56edc-f6d5-4d84-9749-8cc8b4146e46&utm_source=C1000094L&utm_medium=referral" data-eg-price="99722.4 EGP" data-eg-name="iPhone 17 Pro Max 256 GB (eSIM only) Silver 5G With FaceTime - International Version" data-eg-image="https://f.nooncdn.com/p/pzsku/Z70429BD50D391C2CB0C1Z/45/_/1779094672/2c253ab7-e018-4bb7-a1cd-8ce1571839f6.jpg?width=1200" data-eg-rating="4.5" data-eg-reviews="29856">
-  <div class="ribbon"></div>
-  <div class="thumb"><img src="https://f.nooncdn.com/p/pzsku/Z70429BD50D391C2CB0C1Z/45/_/1779094672/2c253ab7-e018-4bb7-a1cd-8ce1571839f6.jpg?width=1200"></div>
-  <div class="body">
-    <div class="title"></div>
-    <div class="avail-note"></div>
-    <div class="mini-tabs">
-      <button data-c="sa">السعودية</button>
-      <button data-c="ae">الإمارات</button>
-      <button data-c="eg">مصر</button>
+    <div class="card reveal" data-name-ar="طقم فرش مكياج إيفري داي" data-name-en="Everyday Essentials Brush Set" data-product-id="product-1"
+         data-tagline-ar="✨ مثالي للاستخدام اليومي" data-tagline-en="✨ Perfect for everyday use"
+         data-sa-link="https://www.noon.com/saudi-ar/~revlon/everyday-essentials-multi-use-brush-set-multicolour/N31489433A/p/?o=f965feb66085409b&store=STJ073" data-sa-price="101.65 ر.س" data-sa-name-ar="طقم فرش مكياج إيفري داي" data-sa-name-en="Everyday Essentials Brush Set" data-sa-image="https://f.nooncdn.com/p/pzsku/Z09F21BDDB10388483CE7Z/45/_/1778231293/2b01a494-2421-4316-8c36-3ebc1d48ed63.jpg?width=800" data-sa-rating="4.3" data-sa-reviews="128"
+         data-ae-link="https://www.noon.com/uae-ar/everyday-essentials-multi-use-brush-set-multicolour/N31489433A/p/?o=c3fd75cb8565bddc" data-ae-price="48.10 د.إ" data-ae-name-ar="طقم فرش مكياج إيفري داي" data-ae-name-en="Everyday Essentials Brush Set" data-ae-image="https://f.nooncdn.com/p/pzsku/Z09F21BDDB10388483CE7Z/45/_/1778231293/2b01a494-2421-4316-8c36-3ebc1d48ed63.jpg?width=800" data-ae-rating="4.1" data-ae-reviews="64"
+         data-eg-link="https://www.noon.com/egypt-ar/everyday-essentials-multi-use-brush-set-multicolour/N53404931A/p/?o=a1313a7f4cd2622f" data-eg-price="134.15 ج.م" data-eg-name-ar="طقم فرش مكياج إيفري داي" data-eg-name-en="Everyday Essentials Brush Set" data-eg-image="https://f.nooncdn.com/p/pzsku/Z09F21BDDB10388483CE7Z/45/_/1778231293/2b01a494-2421-4316-8c36-3ebc1d48ed63.jpg?width=800" data-eg-rating="4.5" data-eg-reviews="212">
+      <div class="ribbon"></div>
+      <div class="thumb"><img src="https://f.nooncdn.com/p/pzsku/Z09F21BDDB10388483CE7Z/45/_/1778231293/2b01a494-2421-4316-8c36-3ebc1d48ed63.jpg?width=800"></div>
+      <div class="body">
+        <div class="title"></div>
+        <div class="avail-note"></div>
+        <div class="mini-tabs">
+          <button data-c="sa" data-i18n="tabSa">السعودية</button>
+          <button data-c="ae" data-i18n="tabAe">الإمارات</button>
+          <button data-c="eg" data-i18n="tabEg">مصر</button>
+        </div>
+        <div class="rating-row"></div>
+        <div class="price-row"></div>
+        <div class="actions"></div>
+      </div>
     </div>
-    <div class="rating-row"></div>
-    <div class="price-row"></div>
-    <div class="actions"></div>
-  </div>
-</div>
-<!-- N8N:PRODUCTS:END -->
+    <!-- N8N:PRODUCTS:END -->
   </div>
 
   <div class="notes">
-    <h3>📝 ملحوظات مهمة قبل الشراء</h3>
+    <h3 data-i18n="notesTitle">📝 ملحوظات مهمة قبل الشراء</h3>
     <ul>
-      <li><b>الأسعار والعروض قابلة للتغيير:</b> الأسعار والعروض المعروضة هنا موجودة على نون وقت آخر مزامنة، وممكن نون تغيّرها أو ينتهي العرض في أي وقت — حتى لو لسه شايف نفس السعر هنا. السعر النهائي اللي هتدفعه هو اللي هيظهرلك على موقع نون نفسه لحظة إتمام الطلب.</li>
-      <li><b>إزاي تستخدم كود الخصم:</b> انسخ الكود بزرار "نسخ الكود"، بعدين ادخل على المنتج من زرار "اشتري الآن"، ضيفه للسلة، وفي صفحة الدفع (Checkout) هتلاقي خانة اسمها "كود خصم" أو "Promo Code" — الصق الكود فيها ودوس "تطبيق" قبل ما تكمل الدفع.</li>
-      <li><b>لو الكود مايشتغلش:</b> يبقى غالبًا العرض انتهى من نون أو الكود مش صالح على المنتج ده بالذات — جرّب من غيره أو تابعنا لعروض جديدة.</li>
+      <li data-i18n="note1"><b>الأسعار والعروض قابلة للتغيير:</b> الأسعار والعروض المعروضة هنا موجودة على نون وقت آخر مزامنة، وممكن نون تغيّرها أو ينتهي العرض في أي وقت. السعر النهائي اللي هتدفعه هو اللي هيظهرلك على موقع نون نفسه لحظة إتمام الطلب.</li>
+      <li data-i18n="note2"><b>إزاي تستخدم كود الخصم:</b> انسخ الكود بزرار "نسخ الكود"، بعدين ادخل على المنتج من زرار "اشتري الآن"، ضيفه للسلة، وفي صفحة الدفع هتلاقي خانة "كود خصم" — الصق الكود فيها ودوس "تطبيق" قبل ما تكمل الدفع.</li>
+      <li data-i18n="note3"><b>لو الكود مايشتغلش:</b> يبقى غالبًا العرض انتهى من نون أو الكود مش صالح على المنتج ده بالذات — جرّب من غيره أو تابعنا لعروض جديدة.</li>
     </ul>
   </div>
 
@@ -237,91 +328,184 @@
 
 <footer>
   <div class="wrap">
+    <div class="social-row" id="socialRowFooter"></div>
     <div class="brand">عروض نون</div>
-    <p>هذا الموقع غير تابع لشركة نون رسميًا. قد نحصل على عمولة عند الشراء عبر الروابط الموجودة في هذه الصفحة (رابط إحالة/أفلييت)، وهذا لا يزيد من سعر المنتج على المشتري.</p>
+    <p data-i18n="footerDisclaimer">.</p>
   </div>
 </footer>
 
 <script>
+  /* ============================================================
+     1) حساباتك الشخصية — املى الروابط اللي عندك بس، سيب الباقي
+     فاضي "" وهيختفي تلقائي من الهيدر والفوتر.
+     ============================================================ */
+  const SOCIAL_LINKS = [
+    { icon:"📸", label:"Instagram", url:"" },
+    { icon:"🎵", label:"TikTok",    url:"https://www.tiktok.com/@1z7162" },
+    { icon:"👻", label:"Snapchat",  url:"" },
+    { icon:"✈️", label:"Telegram",  url:"" },
+    { icon:"💬", label:"WhatsApp",  url:"" },
+    { icon:"▶️", label:"YouTube",   url:"" },
+    { icon:"𝕏",  label:"X",        url:"" }
+  ];
+
   const codes = { gulf: "MP94", egypt: "PZ396" };
-  const countryMeta = {
-    sa: { flag:"🇸🇦", name:"السعودية", codeType:"gulf" },
-    ae: { flag:"🇦🇪", name:"الإمارات", codeType:"gulf" },
-    eg: { flag:"🇪🇬", name:"مصر",       codeType:"egypt" }
+  const countryOrder = ["sa","ae","eg"];
+
+  const TRANSLATIONS = {
+    ar: {
+      bioName:"اسمك هنا 👋", bioText:"بجمعلك هنا أحسن عروض نون بعين خبيرة، وبتحديث مستمر أول بأول.",
+      eyebrow:"🔥 عروض مختارة بعناية من نون", h1:"أفضل منتجات نون بكود خصم إضافي",
+      lede:"كل كارت منتج فيه اختيار دولة جوه، اختار دولتك من على المنتج نفسه وهيتظبطلك السعر والرابط تلقائي.",
+      gulfLabel:"كود خصم نون السعودية والإمارات", egyptLabel:"كود خصم نون مصر", copyBtn:"📋 نسخ الكود", copied:"✅ اتنسخ!",
+      bestsellersTitle:"🔥 الأكثر مبيعًا", sectionTitle:"المنتجات المختارة", sectionSub:"بيتحدّث تلقائي من الشيت",
+      filterAll:"🛍️ كل المنتجات", filterEg:" منتجات مصر", filterSa:" منتجات السعودية", filterAe:" منتجات الإمارات",
+      tabSa:"السعودية", tabAe:"الإمارات", tabEg:"مصر",
+      countrySa:"السعودية", countryAe:"الإمارات", countryEg:"مصر",
+      availPrefix:"✅ متاح في:", notAvail:"غير متاح حاليًا في أي دولة",
+      buyNow:"اشتري الآن", copyCodeBtn:"نسخ الكود", unavailable:"للأسف المنتج مش متوفر في بلدك",
+      defaultRibbon:"✨ عرض متاح الآن على نون", rankRibbon:"🏆 الأكثر مبيعًا #",
+      reviewsSuffix:" تقييم",
+      notesTitle:"📝 ملحوظات مهمة قبل الشراء",
+      note1:"<b>الأسعار والعروض قابلة للتغيير:</b> الأسعار والعروض المعروضة هنا موجودة على نون وقت آخر مزامنة، وممكن نون تغيّرها أو ينتهي العرض في أي وقت. السعر النهائي اللي هتدفعه هو اللي هيظهرلك على موقع نون نفسه لحظة إتمام الطلب.",
+      note2:"<b>إزاي تستخدم كود الخصم:</b> انسخ الكود بزرار \"نسخ الكود\"، بعدين ادخل على المنتج من زرار \"اشتري الآن\"، ضيفه للسلة، وفي صفحة الدفع هتلاقي خانة \"كود خصم\" — الصق الكود فيها ودوس \"تطبيق\" قبل ما تكمل الدفع.",
+      note3:"<b>لو الكود مايشتغلش:</b> يبقى غالبًا العرض انتهى من نون أو الكود مش صالح على المنتج ده بالذات — جرّب من غيره أو تابعنا لعروض جديدة.",
+      footerDisclaimer:"هذا الموقع غير تابع لشركة نون رسميًا. قد نحصل على عمولة عند الشراء عبر الروابط الموجودة في هذه الصفحة (رابط إحالة/أفلييت)، وهذا لا يزيد من سعر المنتج على المشتري.",
+      langBtn:"EN"
+    },
+    en: {
+      bioName:"Your name here 👋", bioText:"I hand-pick the best noon deals for you, updated all the time.",
+      eyebrow:"🔥 Handpicked deals from noon", h1:"Best noon products with an extra discount code",
+      lede:"Every card has a country switch built in — pick your country on the product itself and the price and link adjust automatically.",
+      gulfLabel:"noon Saudi & UAE discount code", egyptLabel:"noon Egypt discount code", copyBtn:"📋 Copy code", copied:"✅ Copied!",
+      bestsellersTitle:"🔥 Best sellers", sectionTitle:"Selected products", sectionSub:"Auto-synced from the sheet",
+      filterAll:"🛍️ All products", filterEg:"Egypt", filterSa:"Saudi Arabia", filterAe:"UAE",
+      tabSa:"Saudi Arabia", tabAe:"UAE", tabEg:"Egypt",
+      countrySa:"Saudi Arabia", countryAe:"UAE", countryEg:"Egypt",
+      availPrefix:"✅ Available in:", notAvail:"Not available in any country right now",
+      buyNow:"Buy now", copyCodeBtn:"Copy code", unavailable:"Sorry, not available in your country",
+      defaultRibbon:"✨ Deal live now on noon", rankRibbon:"🏆 Best seller #",
+      reviewsSuffix:" reviews",
+      notesTitle:"📝 A few notes before you buy",
+      note1:"<b>Prices and deals can change:</b> prices shown here reflect noon at the last sync — noon can change or end a deal anytime. The final price is whatever noon shows at checkout.",
+      note2:"<b>How to use the code:</b> copy it with \"Copy code\", open the product via \"Buy now\", add it to cart, and paste the code in the \"Promo code\" field at checkout before you pay.",
+      note3:"<b>If the code doesn't work:</b> the deal probably ended on noon's side, or it doesn't apply to this specific product — try another one or check back for new deals.",
+      footerDisclaimer:"This site is not officially affiliated with noon. We may earn a commission on purchases made through the links on this page (affiliate link), at no extra cost to you.",
+      langBtn:"العربية"
+    }
   };
 
-  function starsHtml(rating, reviews){
+  const CURRENCY_MAP = { "ر.س":"SAR", "د.إ":"AED", "ج.م":"EGP" };
+
+  let currentLang = "ar";
+  const cardApis = [];
+
+  /* ---------------- helpers ---------------- */
+  function localizeCurrency(priceStr, lang){
+    if(!priceStr || lang !== "en") return priceStr || "";
+    let out = priceStr;
+    Object.keys(CURRENCY_MAP).forEach(ar=>{ out = out.replace(ar, CURRENCY_MAP[ar]); });
+    return out;
+  }
+
+  function starsHtml(rating, reviews, lang){
     if(rating === undefined || rating === null || rating === "" || isNaN(parseFloat(rating))) return "";
     const r = Math.max(0, Math.min(5, Math.round(parseFloat(rating))));
     let s = "";
     for(let i=0;i<5;i++){ s += i < r ? "★" : "<span class='empty'>★</span>"; }
-    const reviewsTxt = reviews ? " ("+reviews+" تقييم)" : "";
+    const reviewsTxt = reviews ? " ("+reviews+TRANSLATIONS[lang].reviewsSuffix+")" : "";
     return `<span class="stars">${s}</span><span>${parseFloat(rating).toFixed(1)}</span><span class="count">${reviewsTxt}</span>`;
   }
 
+  /* ---------------- social icons ---------------- */
+  function renderSocial(){
+    const rows = [document.getElementById("socialRow"), document.getElementById("socialRowFooter")];
+    rows.forEach(row=>{
+      if(!row) return;
+      row.innerHTML = "";
+      SOCIAL_LINKS.filter(s => (s.url||"").trim() !== "").forEach(s=>{
+        const a = document.createElement("a");
+        a.href = s.url; a.target = "_blank"; a.rel = "noopener";
+        a.title = s.label; a.textContent = s.icon;
+        a.onclick = ()=> { if(window.gtag) gtag('event','click_social', {platform:s.label}); };
+        row.appendChild(a);
+      });
+    });
+  }
+
+  /* ---------------- card rendering ---------------- */
   function renderCard(card){
-    const order = ["sa","ae","eg"];
-    const available = order.filter(c => (card.dataset[c+"Link"] || "").trim() !== "");
-
-    const ribbonEl = card.querySelector(".ribbon");
-    const tagline = (card.dataset.tagline || "").trim();
-    ribbonEl.textContent = tagline || "✨ عرض متاح الآن على نون";
-
-    const noteEl = card.querySelector(".avail-note");
-    if(available.length){
-      noteEl.textContent = "✅ متاح في: " + available.map(c=>countryMeta[c].flag+" "+countryMeta[c].name).join(" · ");
-    } else {
-      noteEl.textContent = "غير متاح حاليًا في أي دولة";
-    }
+    const available = countryOrder.filter(c => (card.dataset[c+"Link"] || "").trim() !== "");
 
     const tabs = card.querySelectorAll(".mini-tabs button");
-    tabs.forEach(btn=>{
-      const c = btn.dataset.c;
-      btn.disabled = !available.includes(c);
-    });
+    tabs.forEach(btn=>{ btn.disabled = !available.includes(btn.dataset.c); });
 
     let active = available[0] || "sa";
 
     function paint(){
+      const t = TRANSLATIONS[currentLang];
       tabs.forEach(b=> b.classList.toggle("active", b.dataset.c === active));
 
+      const ribbonEl = card.querySelector(".ribbon");
+      const rank = card.dataset.rank;
+      if(rank){
+        ribbonEl.textContent = t.rankRibbon + rank;
+        ribbonEl.classList.add("rank");
+      } else {
+        const tagline = currentLang === "en"
+          ? (card.dataset.taglineEn || card.dataset.taglineAr || "").trim()
+          : (card.dataset.taglineAr || "").trim();
+        ribbonEl.textContent = tagline || t.defaultRibbon;
+        ribbonEl.classList.remove("rank");
+      }
+
+      const noteEl = card.querySelector(".avail-note");
+      const countryKey = {sa:"countrySa", ae:"countryAe", eg:"countryEg"};
+      if(available.length){
+        noteEl.textContent = t.availPrefix + " " + available.map(c=>t[countryKey[c]]).join(" · ");
+      } else {
+        noteEl.textContent = t.notAvail;
+      }
+
       const link = card.dataset[active+"Link"];
-      const price = card.dataset[active+"Price"];
-      const name = card.dataset[active+"Name"] || card.dataset.name;
+      const price = localizeCurrency(card.dataset[active+"Price"], currentLang);
+      const name = currentLang === "en"
+        ? (card.dataset[active+"NameEn"] || card.dataset[active+"NameAr"] || card.dataset.nameEn || card.dataset.nameAr)
+        : (card.dataset[active+"NameAr"] || card.dataset.nameAr);
       const image = card.dataset[active+"Image"];
       const rating = card.dataset[active+"Rating"];
       const reviews = card.dataset[active+"Reviews"];
 
-      card.querySelector(".title").textContent = name;
+      card.querySelector(".title").textContent = name || "";
       if(image){ card.querySelector(".thumb img").src = image; }
-      card.querySelector(".rating-row").innerHTML = starsHtml(rating, reviews);
+      card.querySelector(".rating-row").innerHTML = starsHtml(rating, reviews, currentLang);
 
       const priceEl = card.querySelector(".price-row");
       const actionsEl = card.querySelector(".actions");
       priceEl.textContent = price || "";
 
       actionsEl.innerHTML = "";
-      const codeType = countryMeta[active].codeType;
+      const codeType = (active === "eg") ? "egypt" : "gulf";
 
       const codeBtn = document.createElement("button");
       codeBtn.className = "btn btn-code";
-      codeBtn.textContent = "نسخ الكود";
-      codeBtn.onclick = ()=> copyCode(codeType === "gulf" ? "codeGulf" : "codeEgypt", codeBtn, codeType, "card:"+card.dataset.name);
+      codeBtn.textContent = t.copyCodeBtn;
+      codeBtn.onclick = ()=> copyCode(codeType === "gulf" ? "codeGulf" : "codeEgypt", codeBtn, codeType, "card:"+(name||""));
       actionsEl.appendChild(codeBtn);
 
       if(link){
         const buyBtn = document.createElement("a");
         buyBtn.className = "btn btn-buy";
-        buyBtn.textContent = "اشتري الآن";
+        buyBtn.textContent = t.buyNow;
         buyBtn.target = "_blank";
         buyBtn.rel = "noopener sponsored nofollow";
         buyBtn.href = link;
-        buyBtn.onclick = ()=> gtag('event','click_buy', {product: card.dataset.name, country: active});
+        buyBtn.onclick = ()=> gtag('event','click_buy', {product: name, country: active});
         actionsEl.appendChild(buyBtn);
       } else {
         const msg = document.createElement("div");
         msg.className = "unavailable-msg";
-        msg.textContent = "للأسف المنتج مش متوفر في بلدك";
+        msg.textContent = t.unavailable;
         actionsEl.appendChild(msg);
       }
     }
@@ -334,49 +518,130 @@
       });
     });
 
-    paint();
-
-    card._api = {
+    const api = {
       available,
-      forceCountry(c){
-        if(!available.includes(c)) return false;
-        active = c;
-        paint();
-        return true;
-      }
+      forceCountry(c){ if(!available.includes(c)) return false; active = c; paint(); return true; },
+      repaint: paint
     };
+    card._api = api;
+    cardApis.push(api);
+    paint();
   }
 
-  document.querySelectorAll(".card").forEach(renderCard);
+  function renderAllCards(){
+    document.querySelectorAll(".card").forEach(renderCard);
+    const bsGrid = document.getElementById("bestsellerGrid");
+    document.getElementById("bestsellersSection").classList.toggle("has-items", bsGrid.querySelector(".card") !== null);
+  }
 
-  const filterBtns = document.querySelectorAll("#countryFilter button");
-  filterBtns.forEach(btn=>{
-    btn.addEventListener("click", ()=>{
-      const f = btn.dataset.f;
-      filterBtns.forEach(b=> b.classList.toggle("active", b === btn));
-      document.querySelectorAll(".card").forEach(card=>{
-        if(f === "all"){
-          card.style.display = "";
-          return;
-        }
-        const ok = card._api.available.includes(f);
-        card.style.display = ok ? "" : "none";
-        if(ok) card._api.forceCountry(f);
+  /* ---------------- country filter (main grid only) ---------------- */
+  function initFilter(){
+    const filterBtns = document.querySelectorAll("#countryFilter button");
+    filterBtns.forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const f = btn.dataset.f;
+        filterBtns.forEach(b=> b.classList.toggle("active", b === btn));
+        document.querySelectorAll("#productGrid .card").forEach(card=>{
+          if(f === "all"){ card.style.display = ""; return; }
+          const ok = card._api.available.includes(f);
+          card.style.display = ok ? "" : "none";
+          if(ok) card._api.forceCountry(f);
+        });
+        if(window.gtag) gtag('event','filter_country', {country: f});
       });
-      if(window.gtag) gtag('event','filter_country', {country: f});
     });
-  });
+  }
 
+  /* ---------------- language ---------------- */
+  function applyLanguage(lang){
+    currentLang = lang;
+    const t = TRANSLATIONS[lang];
+    document.getElementById("htmlRoot").lang = lang;
+    document.getElementById("htmlRoot").dir = lang === "ar" ? "rtl" : "ltr";
+    document.querySelectorAll("[data-i18n]").forEach(el=>{
+      const key = el.getAttribute("data-i18n");
+      if(t[key] !== undefined) el.innerHTML = t[key];
+    });
+    document.getElementById("langToggle").textContent = t.langBtn;
+    cardApis.forEach(api => api.repaint());
+    try{ localStorage.setItem("noonSiteLang", lang); }catch(e){}
+  }
+
+  function initLanguage(){
+    let saved = null;
+    try{ saved = localStorage.getItem("noonSiteLang"); }catch(e){}
+    applyLanguage(saved === "en" ? "en" : "ar");
+    document.getElementById("langToggle").addEventListener("click", ()=>{
+      applyLanguage(currentLang === "ar" ? "en" : "ar");
+    });
+  }
+
+  /* ---------------- theme ---------------- */
+  function applyTheme(theme){
+    document.getElementById("htmlRoot").setAttribute("data-theme", theme);
+    document.getElementById("themeToggle").textContent = theme === "dark" ? "☀️" : "🌙";
+    try{ localStorage.setItem("noonSiteTheme", theme); }catch(e){}
+  }
+
+  function initTheme(){
+    let saved = null;
+    try{ saved = localStorage.getItem("noonSiteTheme"); }catch(e){}
+    const preferred = saved || (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    applyTheme(preferred);
+    document.getElementById("themeToggle").addEventListener("click", ()=>{
+      const cur = document.getElementById("htmlRoot").getAttribute("data-theme");
+      applyTheme(cur === "dark" ? "light" : "dark");
+    });
+  }
+
+  /* ---------------- copy code ---------------- */
   function copyCode(elId, btn, codeType, location){
     const text = document.getElementById(elId).textContent.trim();
     navigator.clipboard.writeText(text).then(()=>{
       const original = btn.innerHTML;
       btn.classList.add("copied");
-      btn.innerHTML = "✅ اتنسخ!";
+      btn.innerHTML = TRANSLATIONS[currentLang].copied;
       setTimeout(()=>{ btn.classList.remove("copied"); btn.innerHTML = original; }, 1800);
       if(window.gtag) gtag('event','copy_code', {code_type: codeType, location: location});
     });
   }
+
+  /* ---------------- header scroll shadow ---------------- */
+  function initHeaderScroll(){
+    const header = document.getElementById("siteHeader");
+    window.addEventListener("scroll", ()=>{
+      header.classList.toggle("scrolled", window.scrollY > 6);
+    }, { passive:true });
+  }
+
+  /* ---------------- reveal on scroll ---------------- */
+  function initReveal(){
+    const items = document.querySelectorAll(".reveal");
+    if(!("IntersectionObserver" in window)){
+      items.forEach(el=> el.classList.add("in-view"));
+      return;
+    }
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){
+          entry.target.style.animationDelay = (Math.random()*0.15).toFixed(2)+"s";
+          entry.target.classList.add("in-view");
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold:0.08 });
+    items.forEach(el=> io.observe(el));
+  }
+
+  /* ---------------- boot ---------------- */
+  document.querySelectorAll(".card").forEach(c => c.classList.add("reveal"));
+  renderSocial();
+  initTheme();
+  renderAllCards();
+  initFilter();
+  initLanguage();
+  initHeaderScroll();
+  initReveal();
 
   if(window.gtag) gtag('event','view_products', {products_count: document.querySelectorAll(".card").length});
 </script>
